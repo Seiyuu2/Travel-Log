@@ -1,4 +1,3 @@
-// screens/HomeScreen.tsx
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';

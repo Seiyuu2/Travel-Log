@@ -1,4 +1,3 @@
-// navigation/RootNavigator.tsx
 import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -38,7 +37,7 @@ export default function RootNavigator() {
 
 const styles = StyleSheet.create({
   headerButton: {
-    backgroundColor: 'transparent', // No background so it looks sleek
+    backgroundColor: 'transparent', // Maybe slapp a backgroudn later not too sure
     marginRight: 10,
   },
 });

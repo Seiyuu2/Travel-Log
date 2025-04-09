@@ -1,4 +1,3 @@
-// types/TravelEntry.ts
 export interface TravelEntry {
   id: string;
   imageUri: string;
