@@ -57,7 +57,7 @@ export default function HomeScreen() {
     <View style={styles.entryContainer}>
       <Image source={{ uri: item.imageUri }} style={styles.entryImage} />
       <View style={styles.entryDetails}>
-        <Text style={styles.entryAddress}>Address: {item.address}</Text>
+        <Text style={styles.entryAddress}> {item.address}</Text>
         {item.coordinates && (
           <Text style={styles.entryCoordinates}>
             Coordinates: {item.coordinates}
