@@ -21,7 +21,6 @@ export default function RootNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerRight: () => (
-          // For header we override the default background by setting it transparent.
           <ThemedButton 
             title="Change Theme" 
             onPress={toggleTheme} 
@@ -39,7 +38,7 @@ export default function RootNavigator() {
 
 const styles = StyleSheet.create({
   headerButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent', // No background so it looks sleek
     marginRight: 10,
   },
 });

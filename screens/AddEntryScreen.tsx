@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+// screens/AddEntryScreen.tsx
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
@@ -9,11 +10,14 @@ import uuid from 'react-native-uuid';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
 import { useNavigation } from '@react-navigation/native';
+import { ThemedButton } from '../components/ThemedButton';
+import { ThemeContext } from '../context/ThemeContext';
 
 type AddEntryScreenProp = StackNavigationProp<RootStackParamList, 'AddEntry'>;
 
 export default function AddEntryScreen() {
   const navigation = useNavigation<AddEntryScreenProp>();
+  const { isDarkMode } = useContext(ThemeContext);
 
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [coordinates, setCoordinates] = useState<string>('');
@@ -93,7 +97,6 @@ export default function AddEntryScreen() {
     const plusCode = name.includes('+') ? name : '';
     const addressParts = [street, city, region, postalCode].filter(part => part !== '' && part !== plusCode);
     const address = addressParts.join(', ');
-
     const coordinates = `(${longitude.toFixed(6)}, ${latitude.toFixed(6)})`;
 
     return { coordinates, plusCode, address };
@@ -113,8 +116,8 @@ export default function AddEntryScreen() {
       id: uuid.v4().toString(),
       imageUri,
       address,
-      coordinates, // Save coordinates
-      plusCode,   // Save plusCode
+      coordinates,
+      plusCode,
       timestamp: Date.now(),
     };
 
@@ -139,48 +142,41 @@ export default function AddEntryScreen() {
     }
   };
 
+  // For address fields, set text color based on theme:
+  const textColorStyle = { color: isDarkMode ? 'white' : '#333' };
+
   return (
     <View style={styles.container}>
-      <Button title="Take a Picture" onPress={takePicture} />
+      <ThemedButton title="Take a Picture" onPress={takePicture} />
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       {locationLoading && <ActivityIndicator size="small" style={{ marginTop: 10 }} />}
-      {coordinates && <Text style={styles.coordinatesText}>Coordinates: {coordinates}</Text>}
-      {plusCode && <Text style={styles.plusCodeText}>Plus Code: {plusCode}</Text>}
-      {address ? <Text style={styles.addressText}>Address: {address}</Text> : null}
+      {coordinates !== '' && (
+        <Text style={[styles.coordinatesText, textColorStyle]}>
+          Coordinates: {coordinates}
+        </Text>
+      )}
+      {plusCode !== '' && (
+        <Text style={[styles.plusCodeText, textColorStyle]}>
+          Plus Code: {plusCode}
+        </Text>
+      )}
+      {address ? (
+        <Text style={[styles.addressText, textColorStyle]}>
+          Address: {address}
+        </Text>
+      ) : null}
       <View style={styles.buttonContainer}>
-        <Button title="Save Entry" onPress={saveEntry} />
+        <ThemedButton title="Save Entry" onPress={saveEntry} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  image: {
-    width: '100%',
-    height: 300,
-    marginVertical: 16,
-    borderRadius: 8,
-  },
-  coordinatesText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 5,
-  },
-  plusCodeText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 5,
-  },
-  addressText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 20,
-  },
-  buttonContainer: {
-    marginTop: 10,
-  },
+  container: { flex: 1, padding: 16 },
+  image: { width: '100%', height: 300, marginVertical: 16, borderRadius: 8 },
+  coordinatesText: { fontSize: 14, marginBottom: 5 },
+  plusCodeText: { fontSize: 14, marginBottom: 5 },
+  addressText: { fontSize: 16, marginBottom: 20 },
+  buttonContainer: { marginTop: 10 },
 });
