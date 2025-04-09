@@ -58,7 +58,7 @@ export default function HomeScreen() {
     <View style={styles.entryContainer}>
       <Image source={{ uri: item.imageUri }} style={styles.entryImage} />
       <View style={styles.entryDetails}>
-        <Text style={styles.entryAddress}> {item.address}</Text>
+        <Text style={styles.entryAddress}>Address: {item.address}</Text>
         <Text style={styles.entryCoordinates}>Coordinates: {item.coordinates}</Text>
         <Text style={styles.entryPlusCode}>Plus Code: {item.plusCode}</Text>
         <Text style={styles.entryTimestamp}>{new Date(item.timestamp).toLocaleString()}</Text>
@@ -71,7 +71,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Button title="Add New Entry" onPress={() => navigation.navigate('AddEntry')} />
+      <Button title="Add New Entry" onPress={() => navigation.navigate('AddEntry')} color="yellow" />
       {entries.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>No Entries yet</Text>

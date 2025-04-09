@@ -123,8 +123,8 @@ export default function AddEntryScreen() {
       id: uuid.v4().toString(),
       imageUri,
       address,
-      coordinates,  // Added coordinates field
-      plusCode,     // Added plusCode field
+      coordinates,
+      plusCode,
       timestamp: Date.now(),
     };
 
@@ -151,14 +151,14 @@ export default function AddEntryScreen() {
 
   return (
     <View style={styles.container}>
-      <Button title="Take a Picture" onPress={takePicture} />
+      <Button title="Take a Picture" onPress={takePicture} color="yellow" />
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       {locationLoading && <ActivityIndicator size="small" style={{ marginTop: 10 }} />}
       {coordinates !== '' && <Text style={styles.coordinatesText}>Coordinates: {coordinates}</Text>}
       {plusCode !== '' && <Text style={styles.plusCodeText}>Plus Code: {plusCode}</Text>}
       {address ? <Text style={styles.addressText}>Address: {address}</Text> : null}
       <View style={styles.buttonContainer}>
-        <Button title="Save Entry" onPress={saveEntry} />
+        <Button title="Save Entry" onPress={saveEntry} color="yellow" />
       </View>
     </View>
   );

@@ -1,9 +1,9 @@
 // navigation/RootNavigator.tsx
 import React, { useContext } from 'react';
-import { Button } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/HomeScreen'; 
-import AddEntryScreen from '../screens/AddEntryScreen'; 
+import HomeScreen from '../screens/HomeScreen';
+import AddEntryScreen from '../screens/AddEntryScreen';
 import { ThemeContext } from '../context/ThemeContext';
 
 export type RootStackParamList = {
@@ -19,7 +19,11 @@ export default function RootNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerRight: () => <Button title="Toggle Theme" onPress={toggleTheme} />,
+        headerRight: () => (
+          <TouchableOpacity onPress={toggleTheme} style={styles.themeButton}>
+            <Text style={styles.themeButtonText}>Change Theme</Text>
+          </TouchableOpacity>
+        ),
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Travel Diary' }} />
@@ -27,3 +31,13 @@ export default function RootNavigator() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  themeButton: {
+    marginRight: 10,
+  },
+  themeButtonText: {
+    color: 'yellow',
+    fontSize: 16,
+  },
+});
