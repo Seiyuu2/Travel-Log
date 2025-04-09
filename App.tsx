@@ -1,4 +1,3 @@
-// App.tsx
 import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './navigation/RootNavigator';
