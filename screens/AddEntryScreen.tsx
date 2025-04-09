@@ -1,4 +1,3 @@
-// screens/AddEntryScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -33,7 +32,6 @@ export default function AddEntryScreen() {
         Alert.alert('Permission Error', 'Location permission is required.');
       }
 
-      // For notifications
       const { status: notifStatus } = await Notifications.getPermissionsAsync();
       if (notifStatus !== 'granted') {
         await Notifications.requestPermissionsAsync();
@@ -51,7 +49,6 @@ export default function AddEntryScreen() {
 
       if (!result.canceled) {
         setImageUri(result.assets[0].uri);
-        // Fetch location and address once image is selected
         getCurrentLocation();
       }
     } catch (error) {
@@ -59,7 +56,7 @@ export default function AddEntryScreen() {
     }
   };
 
-  // Function to get current location and then reverse geocode to get address
+  // Function to get current location and reverse geocode to get address
   const getCurrentLocation = async () => {
     setLocationLoading(true);
     try {
@@ -81,10 +78,10 @@ export default function AddEntryScreen() {
     }
   };
 
-  // Helper to format address
+  // Helper to format address as "name, city, region postalCode"
   const formatAddress = (loc: Location.LocationGeocodedAddress): string => {
     const { name, city, region, postalCode } = loc;
-    return `${name ?? ''}, ${city ?? ''}, ${region ?? ''} ${postalCode ?? ''}`;
+    return `${name ?? ''}, ${city ?? ''}, ${region ?? ''} ${postalCode ?? ''}`.trim();
   };
 
   // Save the entry to AsyncStorage
@@ -106,14 +103,11 @@ export default function AddEntryScreen() {
     };
 
     try {
-      // Load existing entries
       const storedEntries = await AsyncStorage.getItem('travelEntries');
       const entries: TravelEntry[] = storedEntries ? JSON.parse(storedEntries) : [];
-      // Save updated entries list
       const updatedEntries = [newEntry, ...entries];
       await AsyncStorage.setItem('travelEntries', JSON.stringify(updatedEntries));
 
-      // Send local notification on save
       await Notifications.scheduleNotificationAsync({
         content: {
           title: 'Travel Entry Saved!',
@@ -122,7 +116,6 @@ export default function AddEntryScreen() {
         },
         trigger: null,
       });
-      // Navigate back once saved (clearing temporary state)
       navigation.goBack();
     } catch (error) {
       console.error('Error saving travel entry: ', error);
