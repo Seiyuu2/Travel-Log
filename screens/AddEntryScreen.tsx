@@ -111,7 +111,7 @@ export default function AddEntryScreen() {
       Alert.alert('Validation', 'Address is not available yet.');
       return;
     }
-
+  
     const newEntry: TravelEntry = {
       id: uuid.v4().toString(),
       imageUri,
@@ -120,13 +120,14 @@ export default function AddEntryScreen() {
       plusCode,
       timestamp: Date.now(),
     };
-
+  
     try {
       const storedEntries = await AsyncStorage.getItem('travelEntries');
       const entries: TravelEntry[] = storedEntries ? JSON.parse(storedEntries) : [];
       const updatedEntries = [newEntry, ...entries];
       await AsyncStorage.setItem('travelEntries', JSON.stringify(updatedEntries));
-
+  
+      // Send a local push notification upon successful saving
       await Notifications.scheduleNotificationAsync({
         content: {
           title: 'Travel Entry Saved!',
@@ -135,13 +136,14 @@ export default function AddEntryScreen() {
         },
         trigger: null,
       });
+  
       navigation.goBack();
     } catch (error) {
       console.error('Error saving travel entry: ', error);
       Alert.alert('Save Error', 'Failed to save the travel entry.');
     }
   };
-
+  
   // For address fields, set text color based on theme:
   const textColorStyle = { color: isDarkMode ? 'white' : '#333' };
 
