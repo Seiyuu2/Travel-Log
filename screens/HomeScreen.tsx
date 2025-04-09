@@ -1,10 +1,12 @@
+// screens/HomeScreen.tsx
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, Alert, StyleSheet, Button } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TravelEntry } from '../types/TravelEntry';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
+import { ThemedButton } from '../components/ThemedButton';
 
 type HomeScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -55,12 +57,23 @@ export default function HomeScreen() {
     <View style={styles.entryContainer}>
       <Image source={{ uri: item.imageUri }} style={styles.entryImage} />
       <View style={styles.entryDetails}>
-        {item.coordinates && <Text style={styles.entryCoordinates}>Coordinates: {item.coordinates}</Text>}
-        {item.plusCode && <Text style={styles.entryPlusCode}>Plus Code: {item.plusCode}</Text>}
+        {item.coordinates && (
+          <Text style={styles.entryCoordinates}>
+            Coordinates: {item.coordinates}
+          </Text>
+        )}
+        {item.plusCode && (
+          <Text style={styles.entryPlusCode}>Plus Code: {item.plusCode}</Text>
+        )}
         <Text style={styles.entryAddress}>Address: {item.address}</Text>
-        <Text style={styles.entryTimestamp}>{new Date(item.timestamp).toLocaleString()}</Text>
+        <Text style={styles.entryTimestamp}>
+          {new Date(item.timestamp).toLocaleString()}
+        </Text>
       </View>
-      <TouchableOpacity style={styles.removeButton} onPress={() => removeEntry(item.id)}>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => removeEntry(item.id)}
+      >
         <Text style={styles.removeButtonText}>Remove</Text>
       </TouchableOpacity>
     </View>
@@ -68,7 +81,10 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Button title="Add New Entry" onPress={() => navigation.navigate('AddEntry')} />
+      <ThemedButton
+        title="Add New Entry"
+        onPress={() => navigation.navigate('AddEntry')}
+      />
       {entries.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>No Entries yet</Text>
