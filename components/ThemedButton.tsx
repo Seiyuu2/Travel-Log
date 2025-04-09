@@ -1,4 +1,3 @@
-// components/ThemedButton.tsx
 import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
@@ -13,9 +12,6 @@ type ThemedButtonProps = {
 export const ThemedButton = ({ title, onPress, containerStyle, textStyle }: ThemedButtonProps) => {
   const { isDarkMode } = useContext(ThemeContext);
 
-  // Standard button styles:
-  // Light Mode: lightblue background with white text.
-  // Dark Mode: yellow background with black text.
   const baseButtonStyle: ViewStyle = {
     backgroundColor: isDarkMode ? 'yellow' : 'lightblue',
     paddingVertical: 12,
