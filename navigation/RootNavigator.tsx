@@ -1,10 +1,11 @@
 // navigation/RootNavigator.tsx
 import React, { useContext } from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import AddEntryScreen from '../screens/AddEntryScreen';
 import { ThemeContext } from '../context/ThemeContext';
+import { ThemedButton } from '../components/ThemedButton.tsx';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -14,15 +15,20 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
-  const { toggleTheme } = useContext(ThemeContext);
+  const { toggleTheme, isDarkMode } = useContext(ThemeContext);
 
   return (
     <Stack.Navigator
       screenOptions={{
         headerRight: () => (
-          <TouchableOpacity onPress={toggleTheme} style={styles.themeButton}>
-            <Text style={styles.themeButtonText}>Change Theme</Text>
-          </TouchableOpacity>
+          // For header, we override default button styles:
+          // Remove background and set text color according to theme.
+          <ThemedButton 
+            title="Change Theme" 
+            onPress={toggleTheme} 
+            containerStyle={styles.headerButton} 
+            textStyle={{ color: isDarkMode ? 'yellow' : 'black', fontSize: 16 }}
+          />
         ),
       }}
     >
@@ -33,11 +39,8 @@ export default function RootNavigator() {
 }
 
 const styles = StyleSheet.create({
-  themeButton: {
+  headerButton: {
+    backgroundColor: 'transparent',
     marginRight: 10,
-  },
-  themeButtonText: {
-    color: 'yellow',
-    fontSize: 16,
   },
 });
