@@ -1,4 +1,3 @@
-// screens/AddEntryScreen.tsx
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -12,6 +11,15 @@ import { RootStackParamList } from '../navigation/RootNavigator';
 import { useNavigation } from '@react-navigation/native';
 import { ThemedButton } from '../components/ThemedButton';
 import { ThemeContext } from '../context/ThemeContext';
+
+// Set up notification handler to show notifications in the foreground
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 type AddEntryScreenProp = StackNavigationProp<RootStackParamList, 'AddEntry'>;
 
@@ -39,7 +47,10 @@ export default function AddEntryScreen() {
 
       const { status: notifStatus } = await Notifications.getPermissionsAsync();
       if (notifStatus !== 'granted') {
-        await Notifications.requestPermissionsAsync();
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Permission Error', 'Notification permission is required to notify you when entries are saved.');
+        }
       }
     })();
   }, []);
@@ -111,7 +122,7 @@ export default function AddEntryScreen() {
       Alert.alert('Validation', 'Address is not available yet.');
       return;
     }
-  
+
     const newEntry: TravelEntry = {
       id: uuid.v4().toString(),
       imageUri,
@@ -120,31 +131,41 @@ export default function AddEntryScreen() {
       plusCode,
       timestamp: Date.now(),
     };
-  
+
     try {
       const storedEntries = await AsyncStorage.getItem('travelEntries');
       const entries: TravelEntry[] = storedEntries ? JSON.parse(storedEntries) : [];
       const updatedEntries = [newEntry, ...entries];
       await AsyncStorage.setItem('travelEntries', JSON.stringify(updatedEntries));
-  
-      // Send a local push notification upon successful saving
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: 'Travel Entry Saved!',
-          body: 'Your travel entry has been added successfully.',
-          sound: 'default',
-        },
-        trigger: null,
-      });
-  
+
+      // Check notification permissions before scheduling
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status === 'granted') {
+        console.log('Scheduling notification...');
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Travel Entry Saved!',
+            body: 'Your travel entry has been added successfully.',
+            sound: 'default',
+          },
+          trigger: null, // Immediate notification
+        });
+        console.log('Notification scheduled successfully.');
+      } else {
+        console.log('Notification permission not granted.');
+        Alert.alert(
+          'Notifications Disabled',
+          'Please enable notifications in your device settings to receive alerts.'
+        );
+      }
+
       navigation.goBack();
     } catch (error) {
       console.error('Error saving travel entry: ', error);
       Alert.alert('Save Error', 'Failed to save the travel entry.');
     }
   };
-  
-  // For address fields, set text color based on theme:
+
   const textColorStyle = { color: isDarkMode ? 'white' : '#333' };
 
   return (
