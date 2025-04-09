@@ -57,15 +57,17 @@ export default function HomeScreen() {
     <View style={styles.entryContainer}>
       <Image source={{ uri: item.imageUri }} style={styles.entryImage} />
       <View style={styles.entryDetails}>
+        <Text style={styles.entryAddress}>Address: {item.address}</Text>
         {item.coordinates && (
           <Text style={styles.entryCoordinates}>
             Coordinates: {item.coordinates}
           </Text>
         )}
         {item.plusCode && (
-          <Text style={styles.entryPlusCode}>Plus Code: {item.plusCode}</Text>
+          <Text style={styles.entryPlusCode}>
+            Plus Code: {item.plusCode}
+          </Text>
         )}
-        <Text style={styles.entryAddress}>Address: {item.address}</Text>
         <Text style={styles.entryTimestamp}>
           {new Date(item.timestamp).toLocaleString()}
         </Text>
@@ -78,7 +80,7 @@ export default function HomeScreen() {
       </TouchableOpacity>
     </View>
   );
-
+  
   return (
     <View style={styles.container}>
       <ThemedButton
