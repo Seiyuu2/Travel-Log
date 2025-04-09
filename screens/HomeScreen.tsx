@@ -58,7 +58,9 @@ export default function HomeScreen() {
     <View style={styles.entryContainer}>
       <Image source={{ uri: item.imageUri }} style={styles.entryImage} />
       <View style={styles.entryDetails}>
-        <Text style={styles.entryAddress}>{item.address}</Text>
+        <Text style={styles.entryAddress}>Address: {item.address}</Text>
+        <Text style={styles.entryCoordinates}>Coordinates: {item.coordinates}</Text>
+        <Text style={styles.entryPlusCode}>Plus Code: {item.plusCode}</Text>
         <Text style={styles.entryTimestamp}>{new Date(item.timestamp).toLocaleString()}</Text>
       </View>
       <TouchableOpacity style={styles.removeButton} onPress={() => removeEntry(item.id)}>
@@ -123,6 +125,16 @@ const styles = StyleSheet.create({
   entryAddress: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  entryCoordinates: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
+  entryPlusCode: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
   },
   entryTimestamp: {
     fontSize: 12,

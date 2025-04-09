@@ -1,3 +1,4 @@
+// screens/AddEntryScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -122,6 +123,8 @@ export default function AddEntryScreen() {
       id: uuid.v4().toString(),
       imageUri,
       address,
+      coordinates,  // Added coordinates field
+      plusCode,     // Added plusCode field
       timestamp: Date.now(),
     };
 
@@ -151,8 +154,8 @@ export default function AddEntryScreen() {
       <Button title="Take a Picture" onPress={takePicture} />
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       {locationLoading && <ActivityIndicator size="small" style={{ marginTop: 10 }} />}
-      {coordinates && <Text style={styles.coordinatesText}>Coordinates: {coordinates}</Text>}
-      {plusCode && <Text style={styles.plusCodeText}>Plus Code: {plusCode}</Text>}
+      {coordinates !== '' && <Text style={styles.coordinatesText}>Coordinates: {coordinates}</Text>}
+      {plusCode !== '' && <Text style={styles.plusCodeText}>Plus Code: {plusCode}</Text>}
       {address ? <Text style={styles.addressText}>Address: {address}</Text> : null}
       <View style={styles.buttonContainer}>
         <Button title="Save Entry" onPress={saveEntry} />
