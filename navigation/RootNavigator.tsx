@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import AddEntryScreen from '../screens/AddEntryScreen';
 import { ThemeContext } from '../context/ThemeContext';
-import { ThemedButton } from '../components/ThemedButton.tsx';
+import { ThemedButton } from '../components/ThemedButton';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,8 +21,7 @@ export default function RootNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerRight: () => (
-          // For header, we override default button styles:
-          // Remove background and set text color according to theme.
+          // For header we override the default background by setting it transparent.
           <ThemedButton 
             title="Change Theme" 
             onPress={toggleTheme} 

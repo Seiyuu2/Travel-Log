@@ -1,6 +1,5 @@
-// screens/AddEntryScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Button, Image, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as Notifications from 'expo-notifications';
@@ -10,7 +9,6 @@ import uuid from 'react-native-uuid';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
 import { useNavigation } from '@react-navigation/native';
-import { ThemedButton } from '../components/ThemedButton';
 
 type AddEntryScreenProp = StackNavigationProp<RootStackParamList, 'AddEntry'>;
 
@@ -93,10 +91,9 @@ export default function AddEntryScreen() {
     const name = loc.name ?? '';
 
     const plusCode = name.includes('+') ? name : '';
-    const addressParts = [street, city, region, postalCode].filter(
-      part => part !== '' && part !== plusCode
-    );
+    const addressParts = [street, city, region, postalCode].filter(part => part !== '' && part !== plusCode);
     const address = addressParts.join(', ');
+
     const coordinates = `(${longitude.toFixed(6)}, ${latitude.toFixed(6)})`;
 
     return { coordinates, plusCode, address };
@@ -116,8 +113,8 @@ export default function AddEntryScreen() {
       id: uuid.v4().toString(),
       imageUri,
       address,
-      coordinates,
-      plusCode,
+      coordinates, // Save coordinates
+      plusCode,   // Save plusCode
       timestamp: Date.now(),
     };
 
@@ -144,24 +141,46 @@ export default function AddEntryScreen() {
 
   return (
     <View style={styles.container}>
-      <ThemedButton title="Take a Picture" onPress={takePicture} />
+      <Button title="Take a Picture" onPress={takePicture} />
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       {locationLoading && <ActivityIndicator size="small" style={{ marginTop: 10 }} />}
-      {coordinates !== '' && <Text style={styles.coordinatesText}>Coordinates: {coordinates}</Text>}
-      {plusCode !== '' && <Text style={styles.plusCodeText}>Plus Code: {plusCode}</Text>}
+      {coordinates && <Text style={styles.coordinatesText}>Coordinates: {coordinates}</Text>}
+      {plusCode && <Text style={styles.plusCodeText}>Plus Code: {plusCode}</Text>}
       {address ? <Text style={styles.addressText}>Address: {address}</Text> : null}
       <View style={styles.buttonContainer}>
-        <ThemedButton title="Save Entry" onPress={saveEntry} />
+        <Button title="Save Entry" onPress={saveEntry} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  image: { width: '100%', height: 300, marginVertical: 16, borderRadius: 8 },
-  coordinatesText: { fontSize: 14, color: '#666', marginBottom: 5 },
-  plusCodeText: { fontSize: 14, color: '#666', marginBottom: 5 },
-  addressText: { fontSize: 16, color: '#333', marginBottom: 20 },
-  buttonContainer: { marginTop: 10 },
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  image: {
+    width: '100%',
+    height: 300,
+    marginVertical: 16,
+    borderRadius: 8,
+  },
+  coordinatesText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 5,
+  },
+  plusCodeText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 5,
+  },
+  addressText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    marginTop: 10,
+  },
 });

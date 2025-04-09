@@ -17,7 +17,7 @@ export const ThemedButton = ({ title, onPress, containerStyle, textStyle }: Them
 
   const buttonStyles = StyleSheet.create({
     button: {
-      backgroundColor: isDarkMode ? 'yellow' : 'blue',
+      backgroundColor: isDarkMode ? 'yellow' : 'lightblue',
       paddingVertical: 12,
       paddingHorizontal: 20,
       borderRadius: 6,
